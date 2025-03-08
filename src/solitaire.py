@@ -1,4 +1,3 @@
-# CARD_OFFSET = 20
 SOLITAIRE_WIDTH = 1000
 SOLITAIRE_HEIGHT = 500
 
@@ -14,10 +13,12 @@ class Suite:
         self.name = suite_name
         self.color = suite_color
 
+
 class Rank:
     def __init__(self, card_name, card_value):
         self.name = card_name
         self.value = card_value
+
 
 class Solitaire(ft.Stack):
     def __init__(self):
@@ -139,3 +140,23 @@ class Solitaire(ft.Stack):
             card.turn_face_down()
             card.move_on_top()
             card.place(self.stock)
+
+    def check_win(self):
+        cards_num = 0
+        for slot in self.foundations:
+            cards_num += len(slot.pile)
+        if cards_num == 52:
+            return True
+        return False
+
+    def winning_sequence(self):
+        for slot in self.foundations:
+            for card in slot.pile:
+                card.animate_position = 2000
+                card.move_on_top()
+                card.top = random.randint(0, SOLITAIRE_HEIGHT)
+                card.left = random.randint(0, SOLITAIRE_WIDTH)
+                self.update()
+        self.controls.append(
+            ft.AlertDialog(title=ft.Text("Congratulations! You won!"), open=True)
+        )
